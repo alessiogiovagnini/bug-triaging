@@ -1,6 +1,7 @@
-from github import Github
+from github import Github, Repository, PaginatedList, NamedUser
 from github import Auth
 from dotenv import load_dotenv
+from typing import Optional
 import os
 
 load_dotenv()
@@ -11,6 +12,25 @@ if __name__ == '__main__':
 
     github_instance: Github = Github(auth=auth)
 
-    for repo in github_instance.get_user().get_repos():
-        print(repo.name)
+    # tuple, first number is request remaining, second is max allowed
+    rate_limit: tuple[int, int] = github_instance.rate_limiting
+    reset_time: int = github_instance.rate_limiting_resettime  # reset time of request allowed
+
+    repository: Repository = github_instance.get_repo("microsoft/vscode")
+
+    issues: PaginatedList = repository.get_issues(state="closed")
+
+    for issue in issues:
+        assignees: list[NamedUser] = issue.assignees  # list of assignee
+        number: int = issue.number
+        title: str = issue.title
+        body: Optional[str]
+
+        raw = issue.raw_data  # just in case
+        # TODO filter and store all the issues
+    pass
+
+
+
+
 
