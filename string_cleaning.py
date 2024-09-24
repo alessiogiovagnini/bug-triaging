@@ -1,7 +1,7 @@
 import marko
 from marko.md_renderer import MarkdownRenderer
 from marko.block import Paragraph, Heading, List, ListItem
-from marko.inline import RawText
+from marko.inline import RawText, Image, Link
 import cleantext
 import nltk
 import ssl
@@ -23,25 +23,27 @@ nltk.download("stopwords")
 
 # recursively traverse the tree and only edit the text is some elements, the code blocks are excluded this way
 # docs: https://marko-py.readthedocs.io/en/latest/api.html#marko.block.ListItem
-def recursive_clean(element):
+def recursive_clean(element, parent, index):
     if (isinstance(element, Paragraph) or
         isinstance(element, Heading) or
         isinstance(element, List) or
         isinstance(element, ListItem)
     ):
-        for elem in element.children:
-            recursive_clean(elem)
+        for idx, elem in enumerate(element.children):
+            recursive_clean(elem, element, idx)
     elif isinstance(element, RawText):
         element.children = cleantext.clean(text=element.children, stemming=True, stopwords=True, stp_lang="english",
                                            extra_spaces=False)  # TODO should the extra spaces be removed????
+    elif isinstance(element, Image) or isinstance(element, Link):
+        parent.children[index] = RawText("")  # replace images and links with empty text
 
 
 def clean_string(text: str) -> str:
     try:
         # create a tree of md elements from text
         md_tree = marko.parse(text)
-        for elem in md_tree.children:
-            recursive_clean(elem)
+        for idx, elem in enumerate(md_tree.children):
+            recursive_clean(elem, md_tree, idx)
 
         md_renderer = MarkdownRenderer()  # turn the tree back to string
         edited_text: str = md_renderer.render(md_tree)
@@ -78,6 +80,10 @@ Works on OSX
 1. Running `scripts/npm.sh install` -> csharp-o/**bin** folder nicely gets created on my linux machine. programmers
 2. Running `gulp vscode-linux-x64` also nicely creates the csharp-o/**bin** folder on my linux machine.
 
+![alt](/src/address)
+
+[text](/link/destination)
+
 Something is strange on our build machine
     """
 
@@ -85,4 +91,5 @@ Something is strange on our build machine
 
     res2 = clean_string(test2)
 
+    res = RawText(match="")
     pass
