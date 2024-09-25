@@ -44,11 +44,14 @@ if __name__ == '__main__':
                     number: int = issue.number
                     title: str = issue.title
                     body: str = issue.body or ""
+                    html_url: str = issue.html_url  # issues and pull request are mixed together, this is to filter pull
+                    split_url: list[str] = html_url.split("/")
+                    is_issue: str = split_url[5]
 
                     #  training set will be composed by all vscode’s issues that (i) are closed; (ii) have exactly
                     #  one assignee; and (iii) have an issue id ≤ 210000. The test set are from number 210001 to 220000.
 
-                    if len(assignees) == 1 and number <= 220000:
+                    if len(assignees) == 1 and number <= 220000 and is_issue == "issues":
                         assignee: NamedUser = assignees[0]
                         assignee_login: str = assignee.login
 
@@ -75,7 +78,7 @@ if __name__ == '__main__':
         print(e)
         sys.exit(1)
 
-    output_file_name: Path = Path("output2.csv")
+    output_file_name: Path = Path("output_1.csv")
 
     file = open(output_file_name, "w")
 
