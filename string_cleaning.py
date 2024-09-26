@@ -24,6 +24,12 @@ nltk.download("stopwords")
 # recursively traverse the tree and only edit the text is some elements, the code blocks are excluded this way
 # docs: https://marko-py.readthedocs.io/en/latest/api.html#marko.block.ListItem
 def recursive_clean(element, parent, index):
+    """
+    Helper function for "clean_string()"
+    :param element: current token element
+    :param parent: parent of the element
+    :param index: index of the element in the children array
+    """
     if (isinstance(element, Paragraph) or
         isinstance(element, Heading) or
         isinstance(element, List) or
@@ -39,6 +45,11 @@ def recursive_clean(element, parent, index):
 
 
 def clean_string(text: str) -> str:
+    """
+    This function cleans a string assuming it represents a markdown text
+    :param text: string to clean
+    :return: cleaned string
+    """
     try:
         # create a tree of md elements from text
         md_tree = marko.parse(text)
