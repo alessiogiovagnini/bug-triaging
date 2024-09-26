@@ -12,6 +12,7 @@ load_dotenv()
 API_KEY: str = os.getenv("API_KEY")
 
 if __name__ == '__main__':
+    start: float = time.time()
     auth = Auth.Token(API_KEY)
 
     github_instance: Github = Github(auth=auth, per_page=100)
@@ -33,7 +34,9 @@ if __name__ == '__main__':
         i: int = 0
         not_finished: bool = True
         while not_finished:
+            # check if we still have requests
             if github_instance.rate_limiting[0] < 10:
+                print(f"request limit hit, waiting for {reset_time - time.time()} seconds")
                 time.sleep(reset_time - time.time())
             current_issues: list = issues.get_page(i)
             print(f"Current page: {i}")
@@ -90,7 +93,8 @@ if __name__ == '__main__':
 
     file.close()
 
-    print(f"Script end")
+    end: float = time.time()
+    print(f"Script ended in {(end - start) / 60} minutes")
     sys.exit(0)
 
 
