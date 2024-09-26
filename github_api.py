@@ -1,6 +1,6 @@
 import sys
 from pathlib import Path
-
+import time
 from github import Github, Repository, PaginatedList, NamedUser
 from github import Auth
 from dotenv import load_dotenv
@@ -33,6 +33,8 @@ if __name__ == '__main__':
         i: int = 0
         not_finished: bool = True
         while not_finished:
+            if github_instance.rate_limiting[0] < 10:
+                time.sleep(reset_time - time.time())
             current_issues: list = issues.get_page(i)
             print(f"Current page: {i}")
             if len(current_issues) == 0:  # the list is empty if the page do not exist
