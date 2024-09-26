@@ -37,7 +37,7 @@ if __name__ == '__main__':
             # check if we still have requests
             if github_instance.rate_limiting[0] < 10:
                 print(f"request limit hit, waiting for {reset_time - time.time()} seconds")
-                time.sleep(reset_time - time.time())
+                time.sleep(reset_time - time.time() + 10)
             current_issues: list = issues.get_page(i)
             print(f"Current page: {i}")
             if len(current_issues) == 0:  # the list is empty if the page do not exist
@@ -64,9 +64,6 @@ if __name__ == '__main__':
 
                         csv_rows.append([number, title, assignee_login, cleaned_body])
 
-                    if number > 220000:
-                        not_finished = False
-                        break
             i = i + 1
     except Exception as e:
         output_file_name: Path = Path("partial_output.csv")
@@ -83,7 +80,7 @@ if __name__ == '__main__':
         print(e)
         sys.exit(1)
 
-    output_file_name: Path = Path("output_1.csv")
+    output_file_name: Path = Path("output.csv")
 
     file = open(output_file_name, "w")
 
