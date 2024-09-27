@@ -5,7 +5,7 @@ from github import Github, Repository, PaginatedList, NamedUser
 from github import Auth
 from dotenv import load_dotenv
 import os
-from string_cleaning import clean_string
+from string_cleaning import clean_string, clean_markdown_string
 import csv
 
 load_dotenv()
@@ -47,7 +47,7 @@ if __name__ == '__main__':
                 for issue in current_issues:
                     assignees: list[NamedUser] = issue.assignees  # list of assignee
                     number: int = issue.number
-                    title: str = issue.title
+                    title: str = clean_string(text=issue.title)
                     body: str = issue.body or ""
                     html_url: str = issue.html_url  # issues and pull request are mixed together, this is to filter pull
                     split_url: list[str] = html_url.split("/")
@@ -60,7 +60,7 @@ if __name__ == '__main__':
                         assignee: NamedUser = assignees[0]
                         assignee_login: str = assignee.login
 
-                        cleaned_body: str = clean_string(text=body)
+                        cleaned_body: str = clean_markdown_string(text=body)
 
                         csv_rows.append([number, title, assignee_login, cleaned_body])
 

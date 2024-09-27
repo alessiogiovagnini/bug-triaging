@@ -4,6 +4,8 @@ __pycache__/
 *$py.class
 .idea
 output.csv
+partial_output.csv
+cleaned_output.csv
 # C extensions
 *.so
 .DS_Store

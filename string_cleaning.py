@@ -46,6 +46,21 @@ def recursive_clean(element, parent, index):
 
 def clean_string(text: str) -> str:
     """
+    This function cleans a string
+    :param text: string to clean
+    :return: cleaned string
+    """
+    try:
+        return cleantext.clean(text=text, stemming=True, stopwords=True, stp_lang="english",
+                        extra_spaces=False)
+
+    except Exception as e:
+        print(f"Error while parsing text: {text}")
+        print(e)
+        return text
+
+def clean_markdown_string(text: str) -> str:
+    """
     This function cleans a string assuming it represents a markdown text
     :param text: string to clean
     :return: cleaned string
@@ -98,9 +113,9 @@ Works on OSX
 Something is strange on our build machine
     """
 
-    res1 = clean_string(test1)
+    res1 = clean_markdown_string(test1)
 
-    res2 = clean_string(test2)
+    res2 = clean_markdown_string(test2)
 
     res = RawText(match="")
     pass
