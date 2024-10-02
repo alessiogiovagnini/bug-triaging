@@ -2,10 +2,10 @@ import marko
 from marko.md_renderer import MarkdownRenderer
 from marko.block import Paragraph, Heading, List, ListItem
 from marko.inline import RawText, Image, Link
+from demoji import replace
 import cleantext
 import nltk
 import ssl
-
 
 # this is a fix for this problem:
 # https://stackoverflow.com/questions/38916452/nltk-download-ssl-certificate-verify-failed
@@ -31,9 +31,9 @@ def recursive_clean(element, parent, index):
     :param index: index of the element in the children array
     """
     if (isinstance(element, Paragraph) or
-        isinstance(element, Heading) or
-        isinstance(element, List) or
-        isinstance(element, ListItem)
+            isinstance(element, Heading) or
+            isinstance(element, List) or
+            isinstance(element, ListItem)
     ):
         for idx, elem in enumerate(element.children):
             recursive_clean(elem, element, idx)
@@ -47,17 +47,24 @@ def recursive_clean(element, parent, index):
 def clean_string(text: str) -> str:
     """
     This function cleans a string
-    :param text: string to clean
+    :param text: the string to clean
     :return: cleaned string
     """
     try:
+        if text == "" or text is None or not isinstance(text, str):
+            return ""
         return cleantext.clean(text=text, stemming=True, stopwords=True, stp_lang="english",
-                        extra_spaces=False)
+                               extra_spaces=False)
 
     except Exception as e:
         print(f"Error while parsing text: {text}")
         print(e)
         return text
+
+
+def remove_emoji(text: str) -> str:
+    return replace(string=text, repl="")
+
 
 def clean_markdown_string(text: str) -> str:
     """
@@ -83,7 +90,6 @@ def clean_markdown_string(text: str) -> str:
 
 # this was just for testing and playing around
 if __name__ == '__main__':
-
     test1: str = """upgrade to rc1 dnx/runtime programs programmer
 
 ```bash

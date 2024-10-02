@@ -47,3 +47,7 @@ pip install -r requirement.txt
 Create a file named `.env ` and add the github key, use the file
 `example.env` as a guide. 
 ### !!! Do not push any file containing secret keys !!!
+
+
+# Using the cleaning tool
+use: ` python3 cleaning_tool.py --help` to list the usage
