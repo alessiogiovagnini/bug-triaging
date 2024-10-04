@@ -6,6 +6,7 @@ from demoji import replace
 import cleantext
 import nltk
 import ssl
+import re
 
 # this is a fix for this problem:
 # https://stackoverflow.com/questions/38916452/nltk-download-ssl-certificate-verify-failed
@@ -64,6 +65,13 @@ def clean_string(text: str) -> str:
 
 def remove_emoji(text: str) -> str:
     return replace(string=text, repl="")
+
+
+# remove some special characters like 🕮 and chinise alphabet
+def remove_special_char(text: str) -> str:
+    cleaned: str = re.sub(r'[\u4e00-\u9fff]+', "", text)
+    cleaned = re.sub(r"🕮", "", cleaned)
+    return cleaned
 
 
 def clean_markdown_string(text: str) -> str:
