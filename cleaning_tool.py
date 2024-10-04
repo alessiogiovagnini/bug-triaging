@@ -2,7 +2,7 @@ import pandas as pd
 import sys
 import argparse
 from pathlib import Path
-from string_cleaning import clean_string, remove_emoji
+from string_cleaning import clean_string, remove_emoji, remove_special_char
 
 
 def main(column_names: list[str], input_file: Path, output_file: Path):
@@ -24,6 +24,7 @@ def main(column_names: list[str], input_file: Path, output_file: Path):
     for current_column in column_names:
         df[current_column] = df[current_column].apply(clean_string)
         df[current_column] = df[current_column].apply(remove_emoji)
+        df[current_column] = df[current_column].apply(remove_special_char)
 
     # Save the updated dataframe to a new CSV file
     df.to_csv(output_file, index=False)
