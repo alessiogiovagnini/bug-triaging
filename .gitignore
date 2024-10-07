@@ -3,7 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 .idea
-output.csv
+*.csv
 partial_output.csv
 cleaned_output.csv
 # C extensions
@@ -20,6 +20,7 @@ eggs/
 lib/
 lib64/
 parts/
+results/
 sdist/
 var/
 wheels/
