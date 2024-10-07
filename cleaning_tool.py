@@ -5,6 +5,20 @@ from pathlib import Path
 from string_cleaning import clean_string, remove_emoji, remove_special_char
 
 
+def filter_single_users(dataframe: pd.DataFrame, min_pull: int = 1) -> pd.DataFrame:
+    """
+    remove all the assignee that have a number inferior to 'min_pull' of pull requests
+    :param dataframe: the dataframe to filter
+    :param min_pull: the number of minimum pull request that an assignee have to make to
+    be included in the dataframe
+    :return:
+    """
+    total_issues = dataframe['assignee'].value_counts()
+    filtered_issues = total_issues[total_issues > min_pull]
+
+    return dataframe.loc[dataframe["assignee"].isin(filtered_issues)]
+
+
 def main(column_names: list[str], input_file: Path, output_file: Path):
     """
         This function produce a csv file
