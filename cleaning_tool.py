@@ -16,7 +16,9 @@ def filter_single_users(dataframe: pd.DataFrame, min_pull: int = 1) -> pd.DataFr
     total_issues = dataframe['assignee'].value_counts()
     filtered_issues = total_issues[total_issues > min_pull]
 
-    return dataframe.loc[dataframe["assignee"].isin(filtered_issues)]
+
+    return dataframe[dataframe['assignee'].isin(filtered_issues.index)]
+
 
 
 def main(column_names: list[str], input_file: Path, output_file: Path):
