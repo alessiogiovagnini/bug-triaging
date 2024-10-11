@@ -1,21 +1,35 @@
 import sys
 from pathlib import Path
 import time
-from github import Github, Repository, PaginatedList, NamedUser
+from github import Github, Repository, PaginatedList, NamedUser, Issue
 from github import Auth
 from dotenv import load_dotenv
 import os
 from string_cleaning import clean_string, clean_markdown_string
 import csv
+from typing import Optional
 
 load_dotenv()
 API_KEY: str = os.getenv("API_KEY")
 
+auth = Auth.Token(API_KEY)
+github_instance: Github = Github(auth=auth, per_page=100)
+
+
+def get_issue_information(issue_number: int) -> Optional[Issue]:
+    try:
+        repo: Repository = github_instance.get_repo("microsoft/vscode")  # can this line be avoided???
+        res_issue: Issue = repo.get_issue(number=issue_number)
+        if not res_issue:
+            return None
+        return res_issue
+    except Exception as err:
+        print(err)
+        return None
+
+
 if __name__ == '__main__':
     start: float = time.time()
-    auth = Auth.Token(API_KEY)
-
-    github_instance: Github = Github(auth=auth, per_page=100)
 
     # tuple, first number is request remaining, second is max allowed
     rate_limit: tuple[int, int] = github_instance.rate_limiting

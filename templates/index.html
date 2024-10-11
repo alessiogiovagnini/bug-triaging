@@ -2,9 +2,37 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Search Assignee</title>
 </head>
 <body>
+
+<div>
+    <input type="number" id="input_issue" placeholder="Insert here the issue number" min="0">
+</div>
+<div>
+    <button type="button" id="search_button">Search</button>
+</div>
+
+<script>
+
+    document.getElementById("search_button").addEventListener("click", start_search);
+
+    function open_link(link) {
+        window.open(link, "_self")
+    }
+
+    function reset_input() {
+        document.getElementById("input_issue").value = "";
+    }
+
+    function start_search() {
+        const issue_number = document.getElementById("input_issue").value;
+        reset_input();
+        if (issue_number === "" || !issue_number) {return;}
+        open_link(`/assignee?issue=${issue_number}`)
+    }
+
+</script>
 
 </body>
 </html>
