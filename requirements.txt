@@ -15,3 +15,4 @@ marko~=2.1.2
 cleantext~=1.1.4
 pandas==2.2.3
 demoji==1.1.0
+flask~=3.0.3
