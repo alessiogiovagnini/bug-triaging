@@ -3,13 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <title>Search Assignee</title>
+    <style>
+
+        div.search {
+          text-align: center;
+          padding: 5%;
+        }
+        div.search_button{
+            text-align: center;
+        }
+        p.title{
+            text-align: center;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 48px;
+            font-weight: bold;
+        }
+        button {
+            padding: 10px 20px;            /* Space inside the button */
+            font-size: 16px;               /* Font size */
+            font-weight: bold;             /* Bold text */
+            color: #fff;                   /* Text color */
+            background-color: #007BFF;     /* Background color */
+            border: none;                  /* Remove border */
+            border-radius: 5px;            /* Rounded corners */
+            cursor: pointer;               /* Pointer cursor on hover */
+            transition: background-color 0.3s ease; /* Smooth transition */
+        }
+        button:hover {
+            background-color: #0056b3; /* Darker shade on hover */
+        }
+
+        button:active {
+            background-color: #004085; /* Even darker shade when clicked */
+        }
+        input[type="number"] {
+            width: 10%;
+            padding: 10px 15px;           /* Add padding */
+            font-size: 16px;              /* Increase font size for readability */
+            border: 2px solid #ccc;       /* Add border */
+            border-radius: 4px;           /* Round the corners */
+            outline: none;                /* Remove default outline */
+            transition: border-color 0.3s ease; /* Smooth transition for border color */
+        }
+        input[type="number"]:hover {
+            border-color: #999;           /* Change border color on hover */
+        }
+
+        input[type="number"]:focus {
+            border-color: #007BFF;        /* Border color on focus */
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.3); /* Add subtle shadow */
+        }
+        input[type="number"] {
+            width: 100%;                  /* Full-width on small screens */
+            max-width: 300px;             /* Set a max width */
+            box-sizing: border-box;       /* Includes padding in width */
+        }
+
+        @media (max-width: 600px) {
+            input[type="text"] {
+                font-size: 14px;          /* Smaller font size on small screens */
+            }
+        }
+
+    </style>
 </head>
 <body>
 
-<div>
+<p class="title">
+    Automated Bug Triaging
+</p>
+
+<div class="search">
     <input type="number" id="input_issue" placeholder="Insert here the issue number" min="0">
 </div>
-<div>
+<div class="search_button">
     <button type="button" id="search_button">Search</button>
 </div>
 

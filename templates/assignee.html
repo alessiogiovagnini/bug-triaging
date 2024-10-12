@@ -3,17 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <title>Display Assignee</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        div {
+          padding: 5%;
+        }
+        p {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 20px;
+        }
+        p.sub {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 25px;
+            font-weight: bold;
+        }
+        button {
+            padding: 10px 20px;            /* Space inside the button */
+            font-size: 16px;               /* Font size */
+            font-weight: bold;             /* Bold text */
+            color: #fff;                   /* Text color */
+            background-color: #007BFF;     /* Background color */
+            border: none;                  /* Remove border */
+            border-radius: 5px;            /* Rounded corners */
+            cursor: pointer;               /* Pointer cursor on hover */
+            transition: background-color 0.3s ease; /* Smooth transition */
+        }
+        button:hover {
+            background-color: #0056b3; /* Darker shade on hover */
+        }
+
+        button:active {
+            background-color: #004085; /* Even darker shade when clicked */
+        }
+    </style>
 </head>
 <body>
 
 
 <div>
-    <p>Issue number: {{ number }}</p>
-    <p>{{ title }}</p>
-    <p>{{ description }}</p>
+    <p class="sub">Issue number: {{ number }}</p>
+    <p><b>Title:</b> {{ title }}</p>
+    <p><b>Comment:</b> {{ description }}</p>
 </div>
 <div>
-    <p>Best candidate developers:</p>
+    <p class="sub">Best candidate developers:</p>
     {% for candidate in candidates %}
         <p>{{ candidate }}</p>
     {% endfor %}
