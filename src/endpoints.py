@@ -1,4 +1,5 @@
 from flask import Flask, request, render_template, make_response
+import flask
 from github_api import get_issue_information
 from github import Issue
 from typing import Optional
@@ -14,16 +15,31 @@ def base_route():
     return response
 
 
+@app.errorhandler(404)
+def page_not_found(e):
+    return f"Not found: {e}"
+
+
+@app.errorhandler(400)
+def bad_request(e):
+    return f"Bad request: {e}"
+
+
+@app.errorhandler(500)
+def bad_request(e):
+    return f"Internal server error: {e}"
+
+
 @app.route("/assignee", methods=["GET"])
 def get_potential_assignee():
     issue_number = request.args.get('issue')  # number of the issue to get
     if not issue_number:
-        return "error"  # TODO
+        return flask.redirect("/400")
     try:
         number: int = int(issue_number)
         issue_info: Optional[Issue] = get_issue_information(issue_number=number)
         if not issue_info:
-            return "error3"  # TODO
+            return flask.redirect("/404")
 
         # TODO get list of potential assignee
         tmp = ["bob", "john", "smith"]
@@ -35,7 +51,7 @@ def get_potential_assignee():
 
     except Exception as err:
         print(err)
-        return "error2"  # TODO
+        return flask.redirect("/500")
 
 
 
