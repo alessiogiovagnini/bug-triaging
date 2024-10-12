@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Display Assignee</title>
+</head>
+<body>
+
+
+<div>
+    <p>Issue number: {{ number }}</p>
+    <p>{{ title }}</p>
+    <p>{{ description }}</p>
+</div>
+<div>
+    <p>Best candidate developers:</p>
+    {% for candidate in candidates %}
+        <p>{{ candidate }}</p>
+    {% endfor %}
+</div>
+
+<div>
+    <button type="button" id="back">Back to search</button>
+</div>
+
+
+<script>
+    document.getElementById("back").addEventListener("click", go_back);
+
+    function open_link(link) {
+        window.open(link, "_self")
+    }
+
+    function go_back() {
+        open_link("/")
+    }
+</script>
+
+</body>
+</html>
