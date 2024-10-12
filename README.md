@@ -51,3 +51,11 @@ Create a file named `.env ` and add the github key, use the file
 
 # Using the cleaning tool
 use: ` python3 cleaning_tool.py --help` to list the usage
+
+
+# running the server
+To run the server simply run the `main.py`
+```shell
+python3 main.py
+```
+The server will start on localhost 3000
