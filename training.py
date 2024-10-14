@@ -9,48 +9,6 @@ import numpy as np
 from transformers import AutoModelForSequenceClassification, Trainer, TrainingArguments, EarlyStoppingCallback
 
 
-#Setting GPU
-os.environ["CUDA_VISIBLE_DEVICES"]="1"
-
-# Load your dataset
-df = pd.read_csv('cleaned_output2.csv')
-df = df.dropna()
-df = ct.filter_single_users(dataframe=df, min_pull=5)
-
-
-# Encode the assignee names
-label_encoder = LabelEncoder()
-df['assignee_encoded'] = label_encoder.fit_transform(df['assignee'])
-df['input_text'] = "<#TITLE-START#> " + df['title'] + " <#TITLE-END#> <#BODY-START#> " + df['body'] + " <#BODY-END#>"
-
-# Split into input features (titles) and labels (encoded assignees)
-titles = df['input_text'].tolist()
-labels = df['assignee_encoded'].tolist()
-
-model_name = 'distilbert-base-uncased'
-tokenizer = AutoTokenizer.from_pretrained(model_name)
-
-# Tokenize the input titles
-inputs = tokenizer(titles, padding=True, truncation=True, return_tensors='pt', max_length=128).to("cuda")
-
-# Create a Hugging Face dataset
-dataset = Dataset.from_dict({
-    'input_ids': inputs['input_ids'],
-    'attention_mask': inputs['attention_mask'],
-    'labels': labels
-})
-
-# Split the dataset into training and validation sets
-train_test = dataset.train_test_split(test_size=0.2)
-train_dataset = train_test['train']
-test_dataset = train_test['test']
-
-# Load metric functions
-accuracy_metric = evaluate.load('accuracy')
-precision_metric = evaluate.load('precision')
-recall_metric = evaluate.load('recall')
-f1_metric = evaluate.load('f1')
-
 # Define compute metrics function
 def compute_metrics(eval_pred):
     logits, labels = eval_pred
@@ -67,6 +25,58 @@ def compute_metrics(eval_pred):
         'recall': recall['recall'],
         'f1': f1['f1'],
     }
+    
+def makeDataset(current, labels, tokenizer):
+    inputs = tokenizer(current, padding=True, truncation=True, return_tensors='pt', max_length=128).to("cuda")
+    
+    return Dataset.from_dict({
+    'input_ids': inputs['input_ids'],
+    'attention_mask': inputs['attention_mask'],
+    'labels': labels
+})
+
+
+#Setting GPU
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
+
+# Load your dataset
+df = pd.read_csv('training_set.csv')
+df = df.dropna()
+df = ct.filter_single_users(dataframe=df, min_pull=5)
+print("data loaded")
+
+# Encode the assignee names
+label_encoder = LabelEncoder()
+df['assignee_encoded'] = label_encoder.fit_transform(df['assignee'])
+
+df['input_text'] = "<#TITLE-START#> " + df['title'] + " <#TITLE-END#> <#BODY-START#> " + df['body'] + " <#BODY-END#>"
+
+
+# Split into input features (titles) and labels (encoded assignees)
+titles = df['input_text'].tolist()
+
+trainingSet = df[df['number'] < 185000]['input_text'].tolist()
+evaluationSet = df[ (185000 <= df['number']) & (df['number']< 210000)]['input_text'].tolist()
+testSet = df[ 21000 <= df['number']]['input_text'].tolist()
+
+labels = df['assignee_encoded'].tolist()
+
+trainingLabels = df[df['number'] < 185000]['assignee_encoded'].tolist()
+evaluationLabels = df[ (185000 <= df['number']) & (df['number']< 210000)]['assignee_encoded'].tolist()
+testLabels = df[ 21000 <= df['number']]['assignee_encoded'].tolist()
+
+model_name = 'distilbert-base-uncased'
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+
+trainingSet = makeDataset(trainingSet, trainingLabels, tokenizer)
+evaluationSet =  makeDataset(evaluationSet, evaluationLabels, tokenizer)
+testSet =  makeDataset(testSet, testLabels, tokenizer)
+
+# Load metric functions
+accuracy_metric = evaluate.load('accuracy')
+precision_metric = evaluate.load('precision')
+recall_metric = evaluate.load('recall')
+f1_metric = evaluate.load('f1')
 
 # Load the model
 model = AutoModelForSequenceClassification.from_pretrained(model_name, num_labels=len(label_encoder.classes_))
@@ -78,7 +88,7 @@ training_args = TrainingArguments(
     learning_rate=2e-5,
     per_device_train_batch_size=16,
     per_device_eval_batch_size=64,
-    num_train_epochs=3,
+    num_train_epochs=30,
     weight_decay=0.01,
     save_strategy='epoch',  # Save at the end of each epoch
     save_total_limit=1,  # Keep only the most recent model
@@ -91,12 +101,16 @@ training_args = TrainingArguments(
 trainer = Trainer(
     model=model,
     args=training_args,
-    train_dataset=train_dataset,
-    eval_dataset=test_dataset,
+    train_dataset=trainingSet,
+    eval_dataset=evaluationSet,
     compute_metrics=compute_metrics,
     callbacks=[EarlyStoppingCallback(early_stopping_patience=2)],  # Early stopping with patience
 )
 
 # Train the model
 trainer.train()
+
+trainer.evaluate(testSet)
+
+print('FINISHED')
 
