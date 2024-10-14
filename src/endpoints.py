@@ -17,7 +17,8 @@ def base_route():
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return f"Not found: {e}"
+    print(e)
+    return f"Error 404, not found. The number inserted might not exist."
 
 
 @app.errorhandler(400)
@@ -26,7 +27,7 @@ def bad_request(e):
 
 
 @app.errorhandler(500)
-def bad_request(e):
+def internal_error(e):
     return f"Internal server error: {e}"
 
 
