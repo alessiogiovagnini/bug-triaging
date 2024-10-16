@@ -1,11 +1,10 @@
-from flask import Flask, request, render_template, make_response
+from flask import request, render_template, make_response
 import flask
 from github_api import get_issue_information
 from github import Issue
 from typing import Optional
-
-app = Flask(__name__, template_folder="../templates")
-
+from prediction import predict_assignee
+from main import app
 
 @app.route("/", methods=["GET"])
 def base_route():
@@ -45,10 +44,10 @@ def get_potential_assignee():
         if not issue_info:
             return flask.redirect("/404")
 
-        # TODO get list of potential assignee
-        tmp = ["bob", "john", "smith"]
+        # TODO test if it works
+        prediction: list = predict_assignee(title=issue_info.title, body=issue_info.body)
         res = render_template("assignee.html", title=issue_info.title, description=issue_info.body, number=number,
-                              candidates=tmp)
+                              candidates=prediction)
         response = make_response(res)
         response.headers["Content-Type"] = "text/html"
         return response
