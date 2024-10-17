@@ -18,7 +18,10 @@ def base_route():
 @app.errorhandler(404)
 def page_not_found(e):
     print(e)
-    return f"Error 404, not found. The number inserted might not exist."
+    res = render_template("error.html")
+    response = make_response(res)
+    response.headers["Content-Type"] = "text/html"
+    return response
 
 
 @app.errorhandler(400)
