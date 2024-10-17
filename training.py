@@ -51,19 +51,15 @@ df['assignee_encoded'] = label_encoder.fit_transform(df['assignee'])
 
 df['input_text'] = "<#TITLE-START#> " + df['title'] + " <#TITLE-END#> <#BODY-START#> " + df['body'] + " <#BODY-END#>"
 
-
-# Split into input features (titles) and labels (encoded assignees)
-titles = df['input_text'].tolist()
-
 trainingSet = df[df['number'] < 185000]['input_text'].tolist()
 evaluationSet = df[ (185000 <= df['number']) & (df['number']< 210000)]['input_text'].tolist()
-testSet = df[ 21000 <= df['number']]['input_text'].tolist()
+testSet = df[ 210000 <= df['number']]['input_text'].tolist()
 
 labels = df['assignee_encoded'].tolist()
 
 trainingLabels = df[df['number'] < 185000]['assignee_encoded'].tolist()
 evaluationLabels = df[ (185000 <= df['number']) & (df['number']< 210000)]['assignee_encoded'].tolist()
-testLabels = df[ 21000 <= df['number']]['assignee_encoded'].tolist()
+testLabels = df[ 210000 <= df['number']]['assignee_encoded'].tolist()
 
 model_name = 'distilbert-base-uncased'
 tokenizer = AutoTokenizer.from_pretrained(model_name)
@@ -86,7 +82,7 @@ training_args = TrainingArguments(
     output_dir='./results',
     evaluation_strategy='epoch',  # Evaluate at the end of each epoch
     learning_rate=2e-5,
-    per_device_train_batch_size=16,
+    per_device_train_batch_size=32,
     per_device_eval_batch_size=64,
     num_train_epochs=30,
     weight_decay=0.01,
@@ -110,6 +106,7 @@ trainer = Trainer(
 # Train the model
 trainer.train()
 
+#Evaluate the model
 trainer.evaluate(testSet)
 
 print('FINISHED')
