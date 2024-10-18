@@ -1,8 +1,7 @@
-from main import tokenizer, device, model, labels
 from scipy.special import softmax
 
 
-def predict_assignee(title, body):
+def predict_assignee(title, body, tokenizer, device, model, labels):
     # Concatenate title and body
     combined_input = title + " " + body  # TODO which works better???
     # combined_input = f"<#TITLE-START#> {title} <#TITLE-END#> <#BODY-START#> {body} <#BODY-END#>"
