@@ -16,18 +16,6 @@ auth = Auth.Token(API_KEY)
 github_instance: Github = Github(auth=auth, per_page=100)
 
 
-def get_issue_information(issue_number: int) -> Optional[Issue]:
-    try:
-        repo: Repository = github_instance.get_repo("microsoft/vscode")  # can this line be avoided???
-        res_issue: Issue = repo.get_issue(number=issue_number)
-        if not res_issue:
-            return None
-        return res_issue
-    except Exception as err:
-        print(err)
-        return None
-
-
 if __name__ == '__main__':
     start: float = time.time()
 

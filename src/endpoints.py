@@ -1,7 +1,7 @@
 from pathlib import Path
 from flask import request, render_template, make_response, Flask
 import flask
-from github_api import get_issue_information
+from src.github_calls import get_issue_information
 from github import Issue
 from typing import Optional
 from src.prediction import predict_assignee
