@@ -1,10 +1,13 @@
 from scipy.special import softmax
+from src.string_cleaning import clean_markdown_string, remove_emoji
 
 
 def predict_assignee(title, body, tokenizer, device, model, labels):
     # Concatenate title and body
-    combined_input = title + " " + body  # TODO which works better???
-    # combined_input = f"<#TITLE-START#> {title} <#TITLE-END#> <#BODY-START#> {body} <#BODY-END#>"
+    cleaned_title = clean_markdown_string(title)
+    cleaned_body = remove_emoji(clean_markdown_string(body))
+    # combined_input = title + " " + body  # TODO which works better???
+    combined_input = f"<#TITLE-START#> {cleaned_title} <#TITLE-END#> <#BODY-START#> {cleaned_body} <#BODY-END#>"
 
     # Tokenize the input
     inputs = tokenizer(combined_input, return_tensors='pt', padding=True, truncation=True, max_length=128)

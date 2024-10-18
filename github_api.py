@@ -5,7 +5,7 @@ from github import Github, Repository, PaginatedList, NamedUser, Issue
 from github import Auth
 from dotenv import load_dotenv
 import os
-from string_cleaning import clean_string, clean_markdown_string
+from src.string_cleaning import clean_string, clean_markdown_string
 import csv
 from typing import Optional
 

@@ -1,8 +1,7 @@
 import pandas as pd
-import sys
 import argparse
 from pathlib import Path
-from string_cleaning import clean_string, remove_emoji, remove_special_char
+from src.string_cleaning import clean_string, remove_emoji, remove_special_char
 
 
 def filter_single_users(dataframe: pd.DataFrame, min_pull: int = 1) -> pd.DataFrame:
