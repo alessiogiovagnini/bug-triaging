@@ -35,6 +35,10 @@
         button:active {
             background-color: #004085; /* Even darker shade when clicked */
         }
+
+        md-block {
+            white-space: pre; font-family: monospace;
+        }
     </style>
 </head>
 <body>
@@ -43,19 +47,22 @@
 <div>
     <p class="sub">Issue number: {{ number }}</p>
     <p><b>Title:</b> {{ title }}</p>
-    <p><b>Comment:</b> {{ description }}</p>
+    <p><b>Comment:</b></p>
+        <md-block>
+            {{ description }}
+        </md-block>
 </div>
 <div>
     <p class="sub">Best candidate developers:</p>
     {% for candidate in candidates %}
-        <p>{{ candidate }}</p>
+        <p>{{ candidate.name }} - {{ candidate.acc}}%</p>
     {% endfor %}
 </div>
 
 <div>
     <button type="button" id="back">Back to search</button>
 </div>
-
+<script type="module" src="https://md-block.verou.me/md-block.js"></script>
 
 <script>
     document.getElementById("back").addEventListener("click", go_back);

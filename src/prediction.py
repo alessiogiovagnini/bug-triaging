@@ -30,6 +30,14 @@ def predict_assignee(title, body, tokenizer, device, model, labels):
     # Sort by probability in descending order
     ranked_assignees = sorted(assignee_probs, key=lambda x: x[1], reverse=True)
 
-    return ranked_assignees
+    first_five_assignee = ranked_assignees[:5]  # get first 5 elements
+
+    result: list[dict] = []
+    for a in first_five_assignee:
+        name = a[0]
+        acc = round(a[1].item(), 2)
+        tmp = {"name": name, "acc": acc}
+        result.append(tmp)
+    return result
 
 
