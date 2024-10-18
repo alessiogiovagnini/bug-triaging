@@ -1,10 +1,29 @@
-from flask import Flask, request, render_template, make_response
+from pathlib import Path
+from flask import request, render_template, make_response, Flask
 import flask
 from github_api import get_issue_information
 from github import Issue
 from typing import Optional
+from src.prediction import predict_assignee
+from transformers import AutoModelForSequenceClassification, AutoTokenizer
+import json
+import torch
 
 app = Flask(__name__, template_folder="../templates")
+
+
+model_path: Path = Path("./results/checkpoint-14102024")
+model_name: str = "distilbert-base-uncased"
+model = AutoModelForSequenceClassification.from_pretrained(model_path.as_posix())
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+
+device = torch.device('cpu')
+
+model.to(device)
+
+label_path: Path = Path("./labels_json.json")
+with open(label_path) as f:
+    labels = json.load(f)
 
 
 @app.route("/", methods=["GET"])
@@ -45,10 +64,11 @@ def get_potential_assignee():
         if not issue_info:
             return flask.redirect("/404")
 
-        # TODO get list of potential assignee
-        tmp = ["bob", "john", "smith"]
+        # TODO test if it works
+        prediction: list = predict_assignee(title=issue_info.title, body=issue_info.body,
+                                            tokenizer=tokenizer, device=device, model=model, labels=labels)
         res = render_template("assignee.html", title=issue_info.title, description=issue_info.body, number=number,
-                              candidates=tmp)
+                              candidates=prediction)
         response = make_response(res)
         response.headers["Content-Type"] = "text/html"
         return response
