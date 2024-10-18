@@ -51,14 +51,14 @@ df['assignee_encoded'] = label_encoder.fit_transform(df['assignee'])
 
 df['input_text'] = "<#TITLE-START#> " + df['title'] + " <#TITLE-END#> <#BODY-START#> " + df['body'] + " <#BODY-END#>"
 
-trainingSet = df[df['number'] < 185000]['input_text'].tolist()
-evaluationSet = df[ (185000 <= df['number']) & (df['number']< 210000)]['input_text'].tolist()
+trainingSet = df[(190000 <= df['number']) & (df['number']< 208000)]['input_text'].tolist()
+evaluationSet = df[(208000 <= df['number']) & (df['number']< 210000)]['input_text'].tolist()
 testSet = df[(210000 <= df['number']) & (df['number']< 220000)]['input_text'].tolist()
 
 labels = df['assignee_encoded'].tolist()
 
-trainingLabels = df[df['number'] < 185000]['assignee_encoded'].tolist()
-evaluationLabels = df[ (185000 <= df['number']) & (df['number']< 210000)]['assignee_encoded'].tolist()
+trainingLabels = df[(190000 <= df['number']) & (df['number']< 208000)]['assignee_encoded'].tolist()
+evaluationLabels = df[(208000 <= df['number']) & (df['number']< 210000)]['assignee_encoded'].tolist()
 testLabels = df[(210000 <= df['number']) & (df['number']< 220000)]['assignee_encoded'].tolist()
 
 model_name = 'distilbert-base-uncased'
@@ -79,7 +79,7 @@ model = AutoModelForSequenceClassification.from_pretrained(model_name, num_label
 
 # Define training arguments with early stopping and final model saving
 training_args = TrainingArguments(
-    output_dir='./results',
+    output_dir='./resultsNewestIssues',
     evaluation_strategy='epoch',  # Evaluate at the end of each epoch
     learning_rate=2e-5,
     per_device_train_batch_size=32,
