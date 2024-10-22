@@ -3,6 +3,7 @@ from github import Auth
 from dotenv import load_dotenv
 import os
 from typing import Optional
+import json
 
 load_dotenv()
 API_KEY: str = os.getenv("API_KEY")
@@ -26,10 +27,29 @@ def get_issue_information(issue_number: int) -> Optional[Issue]:
 def get_user_events(user_name: str):
     repo: Repository = github_instance.get_repo("microsoft/vscode")
     commits: PaginatedList = repo.get_commits(author=user_name)
-    print(commits.totalCount)
-    pass
+    count: int = 0
+    for e in commits:
+        count = count + 1
+        if count % 100 == 0:
+            print('...')
+    print(user_name, count, 'DONE!')
+    return count
+
+
+def create_commits_json(path):
+    result = []
+
+    with open(path, 'r') as file:
+        json_data = json.load(file)
+
+    for user_name in json_data:
+        current_user_count = get_user_events(user_name)
+        result.append((user_name, current_user_count))
+
+    with open('output.json', 'w') as file:
+        file.write(str(result))
 
 
 if __name__ == '__main__':
-    get_user_events(user_name="hediet")
+    create_commits_json("../labels_json.json")
     pass
