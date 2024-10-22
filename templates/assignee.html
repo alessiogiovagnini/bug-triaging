@@ -60,7 +60,7 @@
     </div>
     <p class="sub">Best candidate developers:</p>
     {% for candidate in candidates %}
-        <p>{{ candidate.name }} - {{ candidate.acc }}%</p>
+        <p>{{ candidate.name }} - {{ candidate.acc }}% - total commits: {{ candidate.commit }}</p>
     {% endfor %}
     <button type="button" id="back">Back to search</button>
 </div>

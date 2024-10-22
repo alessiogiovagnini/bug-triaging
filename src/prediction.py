@@ -1,5 +1,15 @@
+import json
+from pathlib import Path
+
 from scipy.special import softmax
 from src.string_cleaning import clean_markdown_string, remove_emoji
+
+user_commits_path: Path = Path("./label-commits#.json")
+user_commits_map: dict[str, int] = {}
+with open(user_commits_path) as f:
+    user_commits = json.load(f)
+    for user in user_commits:
+        user_commits_map[user[0]] = user[1]
 
 
 def predict_assignee(title, body, tokenizer, device, model, labels):
@@ -35,7 +45,7 @@ def predict_assignee(title, body, tokenizer, device, model, labels):
     for a in first_five_assignee:
         name = a[0]
         acc = round(a[1].item(), 2) * 100
-        tmp = {"name": name, "acc": acc}
+        tmp = {"name": name, "acc": acc, "commit": user_commits_map.get(name, 0)}
         result.append(tmp)
     return result
 

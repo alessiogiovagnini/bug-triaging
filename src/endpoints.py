@@ -64,10 +64,11 @@ def get_potential_assignee():
         if not issue_info:
             return flask.redirect("/404")
 
-        prediction: list = predict_assignee(title=issue_info.title, body=issue_info.body,
+        predictions: list = predict_assignee(title=issue_info.title, body=issue_info.body,
                                             tokenizer=tokenizer, device=device, model=model, labels=labels)
+
         res = render_template("assignee.html", title=issue_info.title, description=issue_info.body, number=number,
-                              candidates=prediction)
+                              candidates=predictions)
         response = make_response(res)
         response.headers["Content-Type"] = "text/html"
         return response
