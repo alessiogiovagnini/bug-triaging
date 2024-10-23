@@ -7,7 +7,6 @@ from dotenv import load_dotenv
 import os
 from src.string_cleaning import clean_string, clean_markdown_string
 import csv
-from typing import Optional
 
 load_dotenv()
 API_KEY: str = os.getenv("API_KEY")

@@ -51,5 +51,5 @@ def create_commits_json(path):
 
 
 if __name__ == '__main__':
-    create_commits_json("../labels_json.json")
+    create_commits_json("../labels/labels_json.json")
     pass

@@ -79,7 +79,7 @@ model = AutoModelForSequenceClassification.from_pretrained(model_name, num_label
 
 # Define training arguments with early stopping and final model saving
 training_args = TrainingArguments(
-    output_dir='./results',
+    output_dir='../results',
     evaluation_strategy='epoch',  # Evaluate at the end of each epoch
     learning_rate=2e-5,
     per_device_train_batch_size=32,

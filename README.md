@@ -48,14 +48,20 @@ Create a file named `.env ` and add the github key, use the file
 `example.env` as a guide. 
 ### !!! Do not push any file containing secret keys !!!
 
-
-# Using the cleaning tool
-use: ` python3 cleaning_tool.py --help` to list the usage
-
-
 # running the server
-To run the server simply run the `main.py`
+Before running a trained model must be provided, the path can be added in the .env
+file.
+Then to run the server simply run the `main.py`
 ```shell
 python3 main.py
 ```
-The server will start on localhost 3000
+The server will start on localhost 3000, the front-end is composed by one
+search page where it is possible to insert an issue number and a list of
+the best five candidate will be displayed.
+
+
+# Using the scripts
+All the scripts are located under the folder `scripts`
+
+### Cleaning tool
+use: ` python3 cleaning_tool.py --help` to list the usage

@@ -8,11 +8,19 @@ from src.prediction import predict_assignee
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
 import json
 import torch
+import os
+from dotenv import load_dotenv
+
+
+load_dotenv()
+model_path: Path = Path(os.getenv("MODEL"))
+root_dir: Path = Path(os.path.realpath(__file__)).parent.parent
+
 
 app = Flask(__name__, template_folder="../templates")
 
 
-model_path: Path = Path("./results/checkpoint-14102024")
+model_path: Path = Path(root_dir, "results", "checkpoint-14102024")
 model_name: str = "distilbert-base-uncased"
 model = AutoModelForSequenceClassification.from_pretrained(model_path.as_posix())
 tokenizer = AutoTokenizer.from_pretrained(model_name)
@@ -21,7 +29,7 @@ device = torch.device('cpu')
 
 model.to(device)
 
-label_path: Path = Path("./labels_json.json")
+label_path: Path = Path(root_dir, "labels", "labels_json.json")
 with open(label_path) as f:
     labels = json.load(f)
 

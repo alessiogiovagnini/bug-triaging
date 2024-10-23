@@ -1,10 +1,12 @@
 import json
 from pathlib import Path
-
 from scipy.special import softmax
 from src.string_cleaning import clean_markdown_string, remove_emoji
+import os
 
-user_commits_path: Path = Path("./label-commits#.json")
+root_dir: Path = Path(os.path.realpath(__file__)).parent.parent
+
+user_commits_path: Path = Path(root_dir, "labels", "label-commits#.json")
 user_commits_map: dict[str, int] = {}
 with open(user_commits_path) as f:
     user_commits = json.load(f)
