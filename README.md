@@ -50,7 +50,7 @@ Create a file named `.env ` and add the github key, use the file
 
 # running the server
 Before running a trained model must be provided, the path can be added in the .env
-file.
+file. Follow the example in `example.rnv`.
 Then to run the server simply run the `main.py`
 ```shell
 python3 main.py
