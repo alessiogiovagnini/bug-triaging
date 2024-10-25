@@ -39,5 +39,24 @@ the best five candidate will be displayed.
 # Using the scripts
 All the scripts are located under the folder `scripts`
 
+### Github API
+This script produce the csv with all the issue collected from the 
+VsCode repository. 
+Simply run: `python3 github_api.py`
+
 ### Cleaning tool
-use: ` python3 cleaning_tool.py --help` to list the usage
+This script is used to apply the cleaning on the csv.
+Use: ` python3 cleaning_tool.py --help` to list the usage
+
+### Training
+The scripts `training.py` and `trainingOnNewestissues.py` are used to
+produce the models.
+
+### Others scripts
+The other scripts were used to test some processes
+
+
+# Project structure
+Under the folder `src` are all the file to run the server and helper functions.
+In `templates` are the html pages. In `labels` are stored the names of the
+assignee that can be returned by the app.
